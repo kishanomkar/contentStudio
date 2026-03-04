@@ -20,6 +20,7 @@ export default function Dashboard() {
     const loadStats = async () => {
       try {
         const response = await dealAPI.getStats();
+        console.log("Response",response);
         setStats(response.data);
       } catch (error) {
         console.error('Failed to load stats:', error);
@@ -34,6 +35,7 @@ export default function Dashboard() {
       setLoading(true);
       try {
         const response = await emailAPI.getEmails(page, 10);
+        console.log("Response2",response);
         setEmails(response.data.emails);
       } catch (error) {
         console.error('Failed to load emails:', error);

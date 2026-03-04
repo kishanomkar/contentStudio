@@ -11,6 +11,7 @@ export default function EmailList({ emails, loading, onPageChange }) {
     setAnalyzingId(emailId);
     try {
       await analysisAPI.analyzeEmail(emailId);
+      console.log("Email analyzed successfully");
       triggerRefresh();
     } catch (error) {
       console.error('Failed to analyze email:', error);

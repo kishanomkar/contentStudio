@@ -8,10 +8,11 @@ const router = express.Router();
 // Fetch emails from Gmail
 router.get('/fetch', authenticate, async (req, res) => {
   try {
-    console.log("User ID:", req.query.userId)
+    console.log("User ID:", req.userId)
     const { pageToken } = req.query;
     
     const result = await fetchEmails(req.userId, pageToken);
+    console.log("result",result);
     res.json(result);
   } catch (error) {
     console.log("Fetch error",error);
@@ -19,6 +20,12 @@ router.get('/fetch', authenticate, async (req, res) => {
   }
 });
 
+router.get('/fetch', authenticate, async (req, res) => {
+  res.json({
+    userId: req.userId,
+    message: "Route working"
+  });
+});
 // Get email details
 router.get('/:emailId', authenticate, async (req, res) => {
   try {

@@ -6,6 +6,7 @@ import authRoutes from './routes/auth.js';
 import emailRoutes from './routes/emails.js';
 import dealRoutes from './routes/deals.js';
 import analysisRoutes from './routes/analysis.js';
+import { authenticate } from './middleware/auth.js';
 
 dotenv.config();
  
@@ -28,8 +29,15 @@ app.use('/api/deals', dealRoutes);
 app.use('/api/analysis', analysisRoutes);
 
 // Health check
-app.get('/health', (req, res) => {
+app.get('/', (req, res) => {
   res.json({ status: 'Server is running' });
+});
+
+app.get("/test-auth", authenticate, (req, res) => {
+  res.json({
+    message: "Auth working",
+    userId: req.userId
+  });
 });
 
 // Error handling middleware

@@ -29,6 +29,7 @@ router.post('/google-auth', async (req, res) => {
 router.get('/me', authenticate, async (req, res) => {
   try {
     const user = await User.findById(req.userId);
+    console.log("object",user);
     res.json({
       _id: user._id,
       email: user.email,
@@ -38,7 +39,7 @@ router.get('/me', authenticate, async (req, res) => {
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
-});
+}); 
 
 // Logout (optional - client-side token removal is primary)
 router.post('/logout', authenticate, (req, res) => {

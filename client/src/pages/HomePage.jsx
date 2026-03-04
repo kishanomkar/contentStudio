@@ -1,12 +1,46 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import NeuralCanvas from '../components/NeuralCanvas.jsx'
 import BrainCanvas from '../components/BrainCanvas.jsx'
+import Navbar from '../components/Navbar.jsx'
+import WaitlistModal from '../components/WaitlistModal.jsx'
 import '../styles/homepage.css'
+import '../styles/shared.css'
+
+// Stats counter hook
+function useCounter(target, duration = 1800, suffix = '') {
+    const [count, setCount] = useState(0)
+    const ref = useRef(null)
+    useEffect(() => {
+        const observer = new IntersectionObserver(([entry]) => {
+            if (!entry.isIntersecting) return
+            observer.disconnect()
+            const start = performance.now()
+            const tick = (now) => {
+                const elapsed = now - start
+                const progress = Math.min(elapsed / duration, 1)
+                const eased = 1 - Math.pow(1 - progress, 3)
+                setCount(Math.floor(eased * target))
+                if (progress < 1) requestAnimationFrame(tick)
+                else setCount(target)
+            }
+            requestAnimationFrame(tick)
+        }, { threshold: 0.3 })
+        if (ref.current) observer.observe(ref.current)
+        return () => observer.disconnect()
+    }, [target, duration])
+    return [count, ref]
+}
 
 export default function HomePage() {
-    const navRef = useRef(null)
     const heroScrollRef = useRef(null)
+    const [showWaitlist, setShowWaitlist] = useState(false)
+
+    // Stat counters
+    const [creators, creatorsRef] = useCounter(12000)
+    const [deals, dealsRef] = useCounter(2400000)
+    const [videos, videosRef] = useCounter(850000)
+    const [revenue, revenueRef] = useCounter(4800000)
 
     useEffect(() => {
         // Scroll progress bar
@@ -15,20 +49,11 @@ export default function HomePage() {
             const scrolled = window.scrollY
             const max = document.documentElement.scrollHeight - window.innerHeight
             if (progressBar) progressBar.style.width = `${(scrolled / max) * 100}%`
-
             // hero scroll hide
             const hs = heroScrollRef.current
             if (hs) {
                 hs.style.opacity = window.scrollY > 100 ? '0' : '1'
                 hs.style.pointerEvents = window.scrollY > 100 ? 'none' : 'auto'
-            }
-
-            // nav shadow
-            const nav = navRef.current
-            if (nav) {
-                nav.style.background = window.scrollY > 20
-                    ? 'rgba(7,10,18,0.9)'
-                    : 'rgba(7,10,18,0.65)'
             }
         }
         window.addEventListener('scroll', onScroll, { passive: true })
@@ -47,14 +72,10 @@ export default function HomePage() {
         let ctaObs
         if (ctaBtn) {
             ctaObs = new IntersectionObserver(entries => {
-                if (entries[0].isIntersecting) {
-                    ctaBtn.style.animation = 'ctaPulse 2.5s ease-in-out infinite'
-                }
+                if (entries[0].isIntersecting) ctaBtn.style.animation = 'ctaPulse 2.5s ease-in-out infinite'
             }, { threshold: 0.5 })
             ctaObs.observe(ctaBtn)
         }
-
-        // Inject CTA keyframe
         const style = document.createElement('style')
         style.id = 'cta-pulse-style'
         style.textContent = `@keyframes ctaPulse{0%,100%{box-shadow:0 0 0 0 rgba(99,102,241,0.5)}50%{box-shadow:0 0 0 16px rgba(99,102,241,0)}}`
@@ -70,27 +91,13 @@ export default function HomePage() {
 
     return (
         <>
+            {showWaitlist && <WaitlistModal onClose={() => setShowWaitlist(false)} />}
             <div className="scroll-progress" id="scrollProgress" />
             <NeuralCanvas />
             <div className="ambient-orb orb-1" />
             <div className="ambient-orb orb-2" />
             <div className="ambient-orb orb-3" />
-
-            {/* NAV */}
-            <nav className="nav" id="nav" ref={navRef}>
-                <div className="nav-inner">
-                    <Link to="/" className="nav-logo">
-                        <span className="logo-icon">⚡</span>
-                        <span className="logo-text">Content<span className="logo-accent">Studio</span> AI</span>
-                    </Link>
-                    <ul className="nav-links">
-                        <li><Link to="/home" className="active">Home</Link></li>
-                        <li><Link to="/about">About</Link></li>
-                        <li><Link to="/faq">FAQ</Link></li>
-                        <li><Link to="/login" className="nav-cta">Login</Link></li>
-                    </ul>
-                </div>
-            </nav>
+            <Navbar />
 
             {/* HERO */}
             <section className="hero" id="hero">
@@ -104,8 +111,8 @@ export default function HomePage() {
                         Produce, Automate, Monetize, and Scale —<br className="hide-mobile" /> All From One Dashboard.
                     </p>
                     <div className="hero-actions animate-in" style={{ '--delay': '0.6s' }}>
-                        <Link to="/login" className="btn-primary">Start Free <span className="btn-arrow">→</span></Link>
-                        <a href="#" className="btn-ghost">Watch Demo ↗</a>
+                        <button className="btn-primary" onClick={() => setShowWaitlist(true)}>Join Waitlist <span className="btn-arrow">→</span></button>
+                        <a href="#features" className="btn-ghost">See Features ↓</a>
                     </div>
                 </div>
                 <div className="hero-scroll" id="heroScroll" ref={heroScrollRef}>
@@ -447,6 +454,129 @@ export default function HomePage() {
 
             </div>
 
+            {/* STATS SECTION */}
+            <section className="stats-section reveal-section">
+                <h2 className="stats-section-title">Trusted by <span style={{ background: 'linear-gradient(135deg,#818cf8,#ec4899)', WebkitBackgroundClip: 'text', backgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Creators Worldwide</span></h2>
+                <div className="stats-grid">
+                    <div className="stat-card" ref={creatorsRef}>
+                        <span className="stat-value">{creators.toLocaleString()}+</span>
+                        <div className="stat-label">Active Creators</div>
+                    </div>
+                    <div className="stat-card" ref={dealsRef}>
+                        <span className="stat-value">${(deals / 1000000).toFixed(1)}M+</span>
+                        <div className="stat-label">Brand Deals Closed</div>
+                    </div>
+                    <div className="stat-card" ref={videosRef}>
+                        <span className="stat-value">{(videos / 1000).toFixed(0)}K+</span>
+                        <div className="stat-label">Videos Produced</div>
+                    </div>
+                    <div className="stat-card" ref={revenueRef}>
+                        <span className="stat-value">${(revenue / 1000000).toFixed(1)}M+</span>
+                        <div className="stat-label">Creator Revenue Generated</div>
+                    </div>
+                </div>
+            </section>
+
+            {/* TESTIMONIALS */}
+            <section className="testimonials-section reveal-section">
+                <div className="testimonials-header">
+                    <h2>What Creators Are <span style={{ background: 'linear-gradient(135deg,#818cf8,#ec4899)', WebkitBackgroundClip: 'text', backgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Saying</span></h2>
+                    <p>Real results from real creators using Content Studio AI.</p>
+                </div>
+                <div className="marquee-outer">
+                    <div className="marquee-track">
+                        {[
+                            { name: 'Alex Johnson', role: 'YouTube Creator · 2.1M subs', quote: 'Content Studio AI 10×\'d my shorts output. What used to take 3 hours takes 15 minutes now.', initials: 'AJ', color: '#6366f1' },
+                            { name: 'Sara Patel', role: 'TikTok Creator · 890K followers', quote: 'The brand deal AI negotiated a $6k sponsorship up to $11k. Paid for itself in one deal.', initials: 'SP', color: '#ec4899' },
+                            { name: 'Mike Chen', role: 'Podcast Host · Top 1%', quote: 'Auto-scheduling and community replies mean I spend zero time on admin. Pure creation now.', initials: 'MC', color: '#10b981' },
+                            { name: 'Priya Sharma', role: 'Instagram · 1.4M', quote: 'The predictive content engine is scary good. I\'ve had 4 viral posts in a row following its recommendations.', initials: 'PS', color: '#f59e0b' },
+                            { name: 'Jordan Lee', role: 'LinkedIn Creator · B2B', quote: 'Finally an AI tool that understands professional content. My engagement is up 340%.', initials: 'JL', color: '#3b82f6' },
+                            { name: 'Maya Torres', role: 'Multi-Platform Creator', quote: 'From 50K to 500K followers in 8 months. The growth analytics coach knew exactly what to optimize.', initials: 'MT', color: '#8b5cf6' },
+                            { name: 'Chris Park', role: 'YouTube · Tech Niche', quote: 'The thumbnail AI alone is worth the price. My CTR went from 4% to 11% in 3 weeks.', initials: 'CP', color: '#14b8a6' },
+                            { name: 'Lisa Wang', role: 'Pinterest & YouTube', quote: 'Multi-modal generation saves me $3,000/month on graphic designers. Incredible value.', initials: 'LW', color: '#f472b6' },
+                        ].concat([
+                            { name: 'Alex Johnson', role: 'YouTube Creator · 2.1M subs', quote: 'Content Studio AI 10×\'d my shorts output. What used to take 3 hours takes 15 minutes now.', initials: 'AJ', color: '#6366f1' },
+                            { name: 'Sara Patel', role: 'TikTok Creator · 890K followers', quote: 'The brand deal AI negotiated a $6k sponsorship up to $11k. Paid for itself in one deal.', initials: 'SP', color: '#ec4899' },
+                            { name: 'Mike Chen', role: 'Podcast Host · Top 1%', quote: 'Auto-scheduling and community replies mean I spend zero time on admin. Pure creation now.', initials: 'MC', color: '#10b981' },
+                            { name: 'Priya Sharma', role: 'Instagram · 1.4M', quote: 'The predictive content engine is scary good. I\'ve had 4 viral posts in a row following its recommendations.', initials: 'PS', color: '#f59e0b' },
+                            { name: 'Jordan Lee', role: 'LinkedIn Creator · B2B', quote: 'Finally an AI tool that understands professional content. My engagement is up 340%.', initials: 'JL', color: '#3b82f6' },
+                            { name: 'Maya Torres', role: 'Multi-Platform Creator', quote: 'From 50K to 500K followers in 8 months. The growth analytics coach knew exactly what to optimize.', initials: 'MT', color: '#8b5cf6' },
+                            { name: 'Chris Park', role: 'YouTube · Tech Niche', quote: 'The thumbnail AI alone is worth the price. My CTR went from 4% to 11% in 3 weeks.', initials: 'CP', color: '#14b8a6' },
+                            { name: 'Lisa Wang', role: 'Pinterest & YouTube', quote: 'Multi-modal generation saves me $3,000/month on graphic designers. Incredible value.', initials: 'LW', color: '#f472b6' },
+                        ]).map((t, i) => (
+                            <div key={i} className="tcard">
+                                <div className="tcard-stars">★★★★★</div>
+                                <p className="tcard-quote">"{t.quote}"</p>
+                                <div className="tcard-author">
+                                    <div className="tcard-avatar" style={{ background: `${t.color}22`, color: t.color }}>{t.initials}</div>
+                                    <div>
+                                        <div className="tcard-name">{t.name}</div>
+                                        <div className="tcard-role">{t.role}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* PRICING */}
+            <section className="pricing-section reveal-section">
+                <div className="pricing-section-header">
+                    <div className="section-badge">✦ Simple Pricing</div>
+                    <h2>Choose Your <span style={{ background: 'linear-gradient(135deg,#818cf8,#ec4899)', WebkitBackgroundClip: 'text', backgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Growth Plan</span></h2>
+                    <p>Start free. Scale when you're ready. No hidden fees, ever.</p>
+                </div>
+                <div className="pricing-grid">
+                    {/* FREE */}
+                    <div className="pricing-card">
+                        <div className="pricing-tier">Starter</div>
+                        <div className="pricing-price">Free</div>
+                        <p className="pricing-desc">Perfect for creators just getting started. No credit card required.</p>
+                        <ul className="pricing-features">
+                            <li><span className="pf-icon">✓</span> 5 AI video clips/month</li>
+                            <li><span className="pf-icon">✓</span> Basic analytics dashboard</li>
+                            <li><span className="pf-icon">✓</span> 1 platform scheduler</li>
+                            <li><span className="pf-icon">✓</span> AI comment categorization</li>
+                            <li className="disabled"><span className="pf-icon">✕</span> Brand deal negotiation</li>
+                            <li className="disabled"><span className="pf-icon">✕</span> Predictive recommendations</li>
+                        </ul>
+                        <button className="pricing-btn outline" onClick={() => setShowWaitlist(true)}>Get Started Free</button>
+                    </div>
+                    {/* PRO */}
+                    <div className="pricing-card featured">
+                        <div className="pricing-badge">⚡ Most Popular</div>
+                        <div className="pricing-tier">Pro Creator</div>
+                        <div className="pricing-price"><sup>$</sup>49<span className="per">/mo</span></div>
+                        <p className="pricing-desc">For serious creators ready to scale their content and revenue.</p>
+                        <ul className="pricing-features">
+                            <li><span className="pf-icon">✓</span> Unlimited AI video clips</li>
+                            <li><span className="pf-icon">✓</span> Full analytics + AI coach</li>
+                            <li><span className="pf-icon">✓</span> 6-platform scheduler</li>
+                            <li><span className="pf-icon">✓</span> Brand deal intelligence</li>
+                            <li><span className="pf-icon">✓</span> Predictive content engine</li>
+                            <li><span className="pf-icon">✓</span> Priority support</li>
+                        </ul>
+                        <button className="pricing-btn solid" onClick={() => setShowWaitlist(true)}>Start Pro — $49/mo →</button>
+                    </div>
+                    {/* AGENCY */}
+                    <div className="pricing-card">
+                        <div className="pricing-tier">Agency</div>
+                        <div className="pricing-price"><sup>$</sup>149<span className="per">/mo</span></div>
+                        <p className="pricing-desc">For agencies and teams managing multiple creator brands.</p>
+                        <ul className="pricing-features">
+                            <li><span className="pf-icon">✓</span> Everything in Pro</li>
+                            <li><span className="pf-icon">✓</span> Up to 10 creator accounts</li>
+                            <li><span className="pf-icon">✓</span> Team collaboration tools</li>
+                            <li><span className="pf-icon">✓</span> White-label exports</li>
+                            <li><span className="pf-icon">✓</span> Dedicated account manager</li>
+                            <li><span className="pf-icon">✓</span> Custom integrations</li>
+                        </ul>
+                        <button className="pricing-btn outline" onClick={() => setShowWaitlist(true)}>Contact Sales →</button>
+                    </div>
+                </div>
+            </section>
+
             {/* FINAL CTA */}
             <section className="final-cta reveal-section">
                 <div className="cta-inner">
@@ -454,7 +584,7 @@ export default function HomePage() {
                     <div className="cta-badge">✦ Join the Creator Revolution</div>
                     <h2 className="cta-title">Stop Managing Tools.<br /><span className="hero-gradient">Start Owning the System.</span></h2>
                     <p className="cta-sub">Content Studio AI brings every lever of creator growth under one roof — so you can focus on what matters.</p>
-                    <Link to="/login" className="btn-primary large" id="ctaBtn">Content Studio AI <span className="btn-arrow">→</span></Link>
+                    <button className="btn-primary large" id="ctaBtn" onClick={() => setShowWaitlist(true)} style={{ border: 'none', cursor: 'pointer', fontFamily: 'var(--font)' }}>Join the Waitlist <span className="btn-arrow">→</span></button>
                 </div>
             </section>
 

@@ -6,19 +6,41 @@ import Deal from '../models/Deal.js';
 
 const router = express.Router();
 
-// Analyze a single email
+
+// Analyze ONE email
 router.post('/email/:emailId', authenticate, async (req, res) => {
   try {
-    const email = await Email.findOne({ _id: req.params.emailId, userId: req.userId });
-    
+
+    console.log("Analyzing email:", req.params.emailId);
+    console.log("User:", req.userId);
+
+    const email = await Email.findOne({
+      _id: req.params.emailId,
+      userId: req.userId
+    });
+
     if (!email) {
-      return res.status(404).json({ error: 'Email not found' });
+      return res.status(404).json({
+        error: 'Email not found'
+      });
     }
 
-    // Analyze the email
-    const analysis = await analyzeEmail(email.plainText || email.body);
+    console.log("Email Found:", email.subject);
 
-    // Update email with analysis
+    const content = email.plainText || email.body;
+
+    if (!content) {
+      return res.status(400).json({
+        error: "Email has no content"
+      });
+    }
+
+    // Analyze
+    const analysis = await analyzeEmail(content);
+
+    console.log("Analysis Result:", analysis);
+
+    // Update email
     email.isDeal = analysis.isDeal;
     email.dealCategory = analysis.category;
     email.dealAnalysis = {
@@ -27,10 +49,14 @@ router.post('/email/:emailId', authenticate, async (req, res) => {
       tags: analysis.tags
     };
     email.isAnalyzed = true;
+
     await email.save();
 
-    // Create deal record if it's a deal
+    console.log("Email Updated");
+
+    // Save deal if needed
     if (analysis.isDeal && analysis.category !== 'NOT_A_DEAL') {
+
       const deal = new Deal({
         userId: req.userId,
         emailId: email._id,
@@ -42,48 +68,62 @@ router.post('/email/:emailId', authenticate, async (req, res) => {
         confidence: analysis.confidence,
         tags: analysis.tags
       });
+      console.log(":The awaiting deal", deal);
       await deal.save();
+
+      console.log("Deal Saved");
     }
 
     res.json({
-      email,
-      analysis
+      success: true,
+      analysis,
+      email
     });
+
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    console.log("ANALYSIS ERROR:", error);
+
+    res.status(400).json({
+      error: error.message
+    });
   }
 });
 
-// Analyze multiple unanalyzed emails
+
+// Batch analyze
 router.post('/batch', authenticate, async (req, res) => {
   try {
-    const unanalyzedEmails = await Email.find({
+
+    const emails = await Email.find({
       userId: req.userId,
       isAnalyzed: false,
       isArchived: false
     }).limit(5);
 
-    if (unanalyzedEmails.length === 0) {
-      return res.json({ message: 'No unanalyzed emails', analyzed: 0 });
+    if (emails.length === 0) {
+      return res.json({
+        message: "No emails to analyze"
+      });
     }
 
-    let analyzedCount = 0;
+    let count = 0;
 
-    for (const email of unanalyzedEmails) {
+    for (const email of emails) {
       try {
-        const analysis = await analyzeEmail(email.plainText || email.body);
+
+        const analysis = await analyzeEmail(
+          email.plainText || email.body
+        );
 
         email.isDeal = analysis.isDeal;
         email.dealCategory = analysis.category;
-        email.dealAnalysis = {
-          reasoning: analysis.reasoning,
-          confidence: analysis.confidence,
-          tags: analysis.tags
-        };
+        email.dealAnalysis = analysis;
         email.isAnalyzed = true;
+
         await email.save();
 
         if (analysis.isDeal && analysis.category !== 'NOT_A_DEAL') {
+
           const deal = new Deal({
             userId: req.userId,
             emailId: email._id,
@@ -95,29 +135,29 @@ router.post('/batch', authenticate, async (req, res) => {
             confidence: analysis.confidence,
             tags: analysis.tags
           });
+
           await deal.save();
         }
 
-        analyzedCount++;
-        // Add delay to avoid rate limiting
-        await new Promise(resolve => setTimeout(resolve, 500));
-      } catch (error) {
-        console.error(`Failed to analyze email:`, error);
+        count++;
+
+        // Delay to avoid rate limit
+        await new Promise(r => setTimeout(r, 800));
+
+      } catch (err) {
+        console.log("Batch error:", err.message);
       }
     }
 
     res.json({
-      message: `Analyzed ${analyzedCount} emails`,
-      analyzed: analyzedCount,
-      remaining: Math.max(0, (await Email.countDocuments({
-        userId: req.userId,
-        isAnalyzed: false,
-        isArchived: false
-      })) - analyzedCount)
+      analyzed: count
     });
+
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).json({
+      error: error.message
+    });
   }
 });
 
-export default router;
+export default router; 

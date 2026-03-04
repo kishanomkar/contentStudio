@@ -10,34 +10,41 @@ export default function Login() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
- const googleLogin = useGoogleLogin({
-  onSuccess: async (codeResponse) => {
-    try {
-      setLoading(true);
-      setError(null);
+  const googleLogin = useGoogleLogin({
+    onSuccess: async (codeResponse) => {
+      try {
+        setLoading(true);
+        setError(null);
+        
+        // Get the user info from Google
+        const response = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
+          headers: {
+            Authorization: `Bearer ${codeResponse.access_token}`,
+          },
+        });
+        console.log("object",response);
+        console.log("coderesponse",codeResponse);
+        
+        if (!response.ok) {
+          throw new Error('Failed to get user info from Google');
+        }
 
-      await login(codeResponse.access_token, "");
-      navigate('/dashboard');
+        // Send access token and refresh token to backend for verification
+        await login(codeResponse.access_token, codeResponse.refresh_token || '');
+        navigate('/dashboard');
+      } catch (err) {
+        setError(err.message || 'Login failed');
+      } finally {
+        setLoading(false);
+      }
+    },
+    onError: () => {
+      setError('Google login failed');
+    },
+    scope: 'https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile',
+    flow: 'implicit',
+  });
 
-    } catch (err) {
-      setError(err.message || 'Login failed');
-    } finally {
-      setLoading(false);
-    }
-  },
-
-  onError: () => {
-    setError('Google login failed');
-  },
-
-  scope: [
-    "https://www.googleapis.com/auth/gmail.readonly",
-    "https://www.googleapis.com/auth/userinfo.email",
-    "https://www.googleapis.com/auth/userinfo.profile"
-  ].join(" "),
-
-  flow: "implicit", // keep for now
-});
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center px-4">
       <div className="w-full max-w-md">

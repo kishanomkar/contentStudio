@@ -4,6 +4,11 @@ import { AuthProvider } from './context/AuthContext';
 import { AppProvider } from './context/AppContext';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
+import HomePage from './pages/HomePage';
+import LandingPage from './pages/LandingPage';
+import AboutPage from './pages/AboutPage';
+import FAQPage from './pages/FAQPage';
+import NotFoundPage from './pages/NotFoundPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import { emailAPI } from './services/api';
 
@@ -27,7 +32,12 @@ function AppContent() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/home" element={<HomePage />} />
+        {/* <Route path="/login" element={<Login />} /> */}
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/faq" element={<FAQPage />} />
+        <Route path='/email-agent-service' element={<Login />} />
         <Route
           path="/dashboard"
           element={
@@ -36,7 +46,7 @@ function AppContent() {
             </ProtectedRoute>
           }
         />
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Router>
   );
