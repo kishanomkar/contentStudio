@@ -29,7 +29,7 @@ export default function YoutubeProcessor() {
       const token = localStorage.getItem("token");
 
       const res = await fetch(
-        `http://localhost:5000/api/youtube/process/${videoId}`,
+        `${import.meta.env.VITE_API_URL}/api/youtube/process/${videoId}`,
         {
           method: "POST",
           headers: {
