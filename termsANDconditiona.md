@@ -1,4 +1,4 @@
-# Terms and Conditions
+# Terms-and-Conditions
 
 ## 1. Agreement to Terms
 
