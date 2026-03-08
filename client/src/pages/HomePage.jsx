@@ -595,6 +595,10 @@ export default function HomePage() {
                         <span className="logo-icon">⚡</span>
                         <span className="logo-text">Content<span className="logo-accent">Studio</span> AI</span>
                     </div>
+                    <div className="footer-links">
+                        <Link to="/terms-of-service">Terms of Service</Link>
+                        <Link to="/privacy-policy">Privacy Policy</Link>
+                    </div>
                     <p className="footer-copy">© 2026 Content Studio AI. All rights reserved.</p>
                 </div>
             </footer>
