@@ -119,3 +119,23 @@ export const getEmailDetails = async (userId, emailId) => {
     throw new Error('Failed to get email details: ' + error.message);
   }
 };
+
+// services/googleAuthService.js
+
+
+
+export const createOAuthClient = (user) => {
+  const oauth2Client = new google.auth.OAuth2(
+    process.env.GOOGLE_CLIENT_ID,
+    process.env.GOOGLE_CLIENT_SECRET,
+    process.env.GOOGLE_REDIRECT_URI
+  );
+
+  oauth2Client.setCredentials({
+    access_token: user.googleAccessToken,
+    refresh_token: user.googleRefreshToken,
+  });
+
+  return oauth2Client;
+};
+

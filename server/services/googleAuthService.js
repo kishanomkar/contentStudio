@@ -68,3 +68,19 @@ export const authenticateUser = async (googleData, accessToken, refreshToken) =>
   }
 };
 export const getOAuth2Client = () => oauth2Client;
+import { google } from "googleapis";
+
+export const createOAuthClient = (user) => {
+  const client = new google.auth.OAuth2(
+    process.env.GOOGLE_CLIENT_ID,
+    process.env.GOOGLE_CLIENT_SECRET,
+    `${process.env.FRONTEND_URL || 'http://localhost:5173'}/auth/callback`
+  );
+
+  client.setCredentials({
+    access_token: user.googleAccessToken,
+    refresh_token: user.googleRefreshToken,
+  });
+
+  return client;
+};

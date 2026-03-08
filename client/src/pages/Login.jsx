@@ -41,8 +41,9 @@ export default function Login() {
     onError: () => {
       setError('Google login failed');
     },
-    scope: 'https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile',
-    flow: 'implicit',
+   scope: 'https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/youtube.force-ssl',
+   flow: 'implicit',
+   access_type: 'offline',
   });
 
   return (

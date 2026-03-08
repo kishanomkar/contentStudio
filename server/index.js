@@ -7,6 +7,7 @@ import emailRoutes from './routes/emails.js';
 import dealRoutes from './routes/deals.js';
 import analysisRoutes from './routes/analysis.js';
 import { authenticate } from './middleware/auth.js';
+import youtubeRouter from "./routes/youtube.js";
 
 dotenv.config();
  
@@ -45,6 +46,8 @@ app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ error: 'Internal server error' });
 });
+
+app.use("/api/youtube", youtubeRouter);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
