@@ -124,13 +124,24 @@ function Text2Video() {
 
       // Handle different response formats
       if (typeof result === "string") {
-        url = result;
+        // Check if it's base64
+        if (result.startsWith("data:")) {
+          url = result;
+        } else if (result.startsWith("blob:")) {
+          url = result;
+        } else {
+          url = result;
+        }
+      } else if (result instanceof Blob) {
+        url = URL.createObjectURL(result);
       } else if (result?.url) {
         url = result.url;
       } else if (result?.video) {
         url = result.video;
       } else if (result?.data?.url) {
         url = result.data.url;
+      } else if (result?.data instanceof Blob) {
+        url = URL.createObjectURL(result.data);
       }
 
       if (!url) {
@@ -141,14 +152,14 @@ function Text2Video() {
 
     } catch (err) {
       console.error(err);
-      alert("Video generation failed");
+      alert(`Video generation failed: ${err.message}`);
     } finally {
       setIsGeneratingVideo(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-6 flex flex-col items-center gap-6">
+    <div className="min-h-screen bg-gray-900 text-white p-6 flex flex-col items-center gap-6 mt-20">
 
       <h1 className="text-3xl font-bold">
         AI Speech & Video Studio
@@ -210,11 +221,20 @@ function Text2Video() {
         </button>
 
         {videoUrl && (
-          <video
-            src={videoUrl}
-            controls
-            className="mt-4 w-full rounded"
-          />
+          <div className="mt-4">
+            <video
+              src={videoUrl}
+              controls
+              className="w-full rounded"
+            />
+            <a
+              href={videoUrl}
+              download="generated-video.mp4"
+              className="mt-3 inline-block px-4 py-2 bg-green-600 rounded text-white"
+            >
+              Download Video
+            </a>
+          </div>
         )}
 
       </div>

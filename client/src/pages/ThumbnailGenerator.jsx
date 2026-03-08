@@ -117,7 +117,7 @@ Make it:
   };
 
   return (
-    <div className=" bg-slate-950 text-white flex items-center justify-center p-6 relative overflow-hidden min-h-screen">
+    <div className=" bg-slate-950 text-white flex items-center justify-center p-6 relative overflow-hidden min-h-screen mt-20">
 
       {/* Background */}
       <div className="absolute top-[-10%] left-[-10%] w-[400px] h-[400px] bg-purple-600/20 rounded-full blur-[120px]" />

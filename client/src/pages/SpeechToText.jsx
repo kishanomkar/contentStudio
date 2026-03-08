@@ -151,7 +151,7 @@ function Speech2Text() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-rose-950 via-slate-950 to-purple-900 flex flex-col items-center justify-center p-6 gap-6">
+    <div className="min-h-screen bg-gradient-to-br from-rose-950 via-slate-950 to-purple-900 flex flex-col items-center justify-center p-6 gap-6 mt-20">
       
       <h1 className="text-5xl font-light bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 bg-clip-text text-transparent">
         AI Speech To Text

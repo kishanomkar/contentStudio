@@ -98,3 +98,4 @@ export const generateReply = async (type, comment) => {
       return "Thanks for your comment!";
   }
 };
+  

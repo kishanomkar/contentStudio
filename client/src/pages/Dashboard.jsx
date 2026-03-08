@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useApp } from '../context/AppContext';
 import { dealAPI, emailAPI, analysisAPI } from '../services/api';
-import { Mail, TrendingUp, Settings, LogOut, Download, Play } from 'lucide-react';
+import { Mail, TrendingUp, Settings, LogOut, Download, Play, Sparkles } from 'lucide-react';
 import StatCard from '../components/StatCard';
 import EmailList from '../components/EmailList';
 import DealList from '../components/DealList';
 import Header from '../components/Header';
+import './dashboard.css';
 
 export default function Dashboard() {
   const { user, logout } = useAuth();
@@ -75,63 +76,91 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="dashboard-container">
+      {/* Animated background orbs */}
+      <div className="dashboard-orb dashboard-orb-1"></div>
+      <div className="dashboard-orb dashboard-orb-2"></div>
+      <div className="dashboard-orb dashboard-orb-3"></div>
+
       <Header user={user} onLogout={logout} />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="dashboard-main">
         {/* Hero Section */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome back, {user?.name}</h1>
-          <p className="text-gray-600">
-            Track and analyze sponsorship deals from your Gmail inbox
-          </p>
+        <div className="dashboard-hero">
+          <div>
+            <h1 className="dashboard-title">Welcome back, <span className="gradient-text">{user?.name}</span></h1>
+            <p className="dashboard-subtitle">
+              Track and analyze sponsorship deals from your Gmail inbox in real-time
+            </p>
+          </div>
+          <div className="hero-badge">
+            <Sparkles className="w-4 h-4" />
+            AI-Powered Analytics
+          </div>
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <StatCard
-            title="Good Deals"
-            value={stats.GOOD_DEAL || 0}
-            icon={TrendingUp}
-            color="bg-green-50"
-            textColor="text-green-600"
-          />
-          <StatCard
-            title="Bad Deals"
-            value={stats.BAD_DEAL || 0}
-            icon={Mail}
-            color="bg-red-50"
-            textColor="text-red-600"
-          />
-          <StatCard
-            title="Not Deals"
-            value={stats.NOT_A_DEAL || 0}
-            icon={Mail}
-            color="bg-blue-50"
-            textColor="text-blue-600"
-          />
-          <StatCard
-            title="Total Analyzed"
-            value={stats.total || 0}
-            icon={Mail}
-            color="bg-purple-50"
-            textColor="text-purple-600"
-          />
+        <div className="stats-grid-container">
+          <div className="stats-grid">
+            <div className="stat-card gradient-card-green">
+              <div className="stat-card-top">
+                <TrendingUp className="stat-icon" />
+                <span className="stat-label">Good Deals</span>
+              </div>
+              <h2 className="stat-value">{stats.GOOD_DEAL || 0}</h2>
+              <div className="stat-progress">
+                <div className="progress-bar" style={{width: `${Math.min((stats.GOOD_DEAL / (stats.total || 1)) * 100, 100)}%`}}></div>
+              </div>
+            </div>
+
+            <div className="stat-card gradient-card-red">
+              <div className="stat-card-top">
+                <Mail className="stat-icon" />
+                <span className="stat-label">Bad Deals</span>
+              </div>
+              <h2 className="stat-value">{stats.BAD_DEAL || 0}</h2>
+              <div className="stat-progress">
+                <div className="progress-bar" style={{width: `${Math.min((stats.BAD_DEAL / (stats.total || 1)) * 100, 100)}%`}}></div>
+              </div>
+            </div>
+
+            <div className="stat-card gradient-card-blue">
+              <div className="stat-card-top">
+                <Mail className="stat-icon" />
+                <span className="stat-label">Not Deals</span>
+              </div>
+              <h2 className="stat-value">{stats.NOT_A_DEAL || 0}</h2>
+              <div className="stat-progress">
+                <div className="progress-bar" style={{width: `${Math.min((stats.NOT_A_DEAL / (stats.total || 1)) * 100, 100)}%`}}></div>
+              </div>
+            </div>
+
+            <div className="stat-card gradient-card-purple">
+              <div className="stat-card-top">
+                <TrendingUp className="stat-icon" />
+                <span className="stat-label">Total Analyzed</span>
+              </div>
+              <h2 className="stat-value">{stats.total || 0}</h2>
+              <div className="stat-progress">
+                <div className="progress-bar" style={{width: `100%`}}></div>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Action Buttons */}
-        <div className="mb-8 flex gap-4 flex-wrap">
+        <div className="action-buttons">
           <button
             onClick={handleBatchAnalyze}
             disabled={isAnalyzing}
-            className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white px-6 py-2 rounded-lg font-semibold flex items-center gap-2 transition"
+            className="btn-primary btn-with-icon"
           >
             <Play className="w-4 h-4" />
             {isAnalyzing ? 'Analyzing...' : 'Analyze New Emails'}
           </button>
           <button
             onClick={handleExportCSV}
-            className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-semibold flex items-center gap-2 transition"
+            className="btn-secondary btn-with-icon"
           >
             <Download className="w-4 h-4" />
             Export CSV
@@ -139,31 +168,25 @@ export default function Dashboard() {
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-4 mb-8 border-b border-gray-200">
+        <div className="dashboard-tabs">
           <button
             onClick={() => setActiveTab('emails')}
-            className={`py-4 px-6 font-semibold border-b-2 transition ${
-              activeTab === 'emails'
-                ? 'border-blue-600 text-blue-600'
-                : 'border-transparent text-gray-600 hover:text-gray-900'
-            }`}
+            className={`tab-button ${activeTab === 'emails' ? 'active' : ''}`}
           >
+            <Mail className="w-4 h-4" />
             Emails
           </button>
           <button
             onClick={() => setActiveTab('deals')}
-            className={`py-4 px-6 font-semibold border-b-2 transition ${
-              activeTab === 'deals'
-                ? 'border-blue-600 text-blue-600'
-                : 'border-transparent text-gray-600 hover:text-gray-900'
-            }`}
+            className={`tab-button ${activeTab === 'deals' ? 'active' : ''}`}
           >
+            <TrendingUp className="w-4 h-4" />
             Deals
           </button>
         </div>
 
         {/* Content */}
-        <div>
+        <div className="dashboard-content">
           {activeTab === 'emails' && (
             <EmailList emails={emails} loading={loading} onPageChange={setPage} />
           )}

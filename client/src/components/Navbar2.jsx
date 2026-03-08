@@ -22,13 +22,12 @@ const MoonIcon = () => (
     </svg>
 )
 
-export default function Navbar() {
+export default function Navbar2() {
     const { pathname } = useLocation()
     const navigate = useNavigate()
     const [menuOpen, setMenuOpen] = useState(false)
     const [darkMode, setDarkMode] = useState(true)
     const [scrolled, setScrolled] = useState(false)
-    const [isLoggedIn, setIsLoggedIn] = useState(false)
     const navRef = useRef(null)
 
     const isActive = (path) => pathname === path ? 'active' : ''
@@ -39,23 +38,9 @@ export default function Navbar() {
         if (token) {
             navigate('/youtube-processor')
         } else {
-            navigate('/login')
+            navigate('/email-agent-service')
         }
     }
-    const handleEmailClick = (e) => {
-        e.preventDefault()
-        const token = localStorage.getItem('token')
-        if (token) {
-            navigate('/dashboard')
-        } else {
-            navigate('/login')
-        }
-    }
-
-    useEffect(() => {
-        const token = localStorage.getItem('token')
-        setIsLoggedIn(!!token)
-    }, [pathname])
 
     useEffect(() => {
         const onScroll = () => setScrolled(window.scrollY > 20)
@@ -97,11 +82,10 @@ export default function Navbar() {
                         <span className="dropdown-toggle">Tools</span>
                         <ul className="dropdown-menu">
                             <li><Link to="/speech-to-text" className={isActive('/speech-to-text')}>Speech to Text</Link></li>
-                            <li><Link to="/text-to-speech" className={isActive('/text-to-speech')}>Text to Speech</Link></li>ī
+                            <li><Link to="/text-to-speech" className={isActive('/text-to-speech')}>Text to Speech</Link></li>
                             <li><Link to="/text-to-video" className={isActive('/text-to-video')}>Text to Video</Link></li>
                             <li><Link to="/thumbnail-generator" className={isActive('/thumbnail-generator')}>Thumbnail Generator</Link></li>
                             <li><a href="#" onClick={handleYoutubeClick} className={isActive('/youtube-processor')}>YouTube Processor</a></li>
-                            <li><a href="#" onClick={handleEmailClick} className={isActive('/dashboard')}>Email Agent Service</a></li>
                         </ul>
                     </li>
 
@@ -110,8 +94,8 @@ export default function Navbar() {
                             {darkMode ? <SunIcon /> : <MoonIcon />}
                         </button>
                     </li>
-                    {!isLoggedIn && <li><Link to="/login" className={`nav-cta ${isActive('/login')}`}>Login</Link></li>}
-                    
+                    <li><Link to="/email-agent-service" className={`nav-cta ${isActive('/email-agent-service')}`}>Login</Link></li>
+                    <li><Link to="/dashboard" className={`nav-cta ${isActive('/dashboard')}`}>Dashboard</Link></li>
                 </ul>
 
                 {/* Mobile controls */}
@@ -131,7 +115,7 @@ export default function Navbar() {
                     <li><Link to="/home" className={isActive('/home')}>Features</Link></li>
                     <li><Link to="/about" className={isActive('/about')}>About</Link></li>
                     <li><Link to="/faq" className={isActive('/faq')}>FAQ</Link></li>
-                    <li className="mobile-menu-section ">
+                    <li className="mobile-menu-section">
                         <span className="section-title">Tools</span>
                         <ul className="submenu">
                             <li><Link to="/speech-to-text" className={isActive('/speech-to-text')}>Speech to Text</Link></li>
@@ -139,10 +123,10 @@ export default function Navbar() {
                             <li><Link to="/text-to-video" className={isActive('/text-to-video')}>Text to Video</Link></li>
                             <li><Link to="/thumbnail-generator" className={isActive('/thumbnail-generator')}>Thumbnail Generator</Link></li>
                             <li><a href="#" onClick={handleYoutubeClick} className={isActive('/youtube-processor')}>YouTube Processor</a></li>
-                            <li><a href="#" onClick={handleEmailClick} className={isActive('/dashboard')}>Email Agent Service</a></li>
                         </ul>
                     </li>
-                    {!isLoggedIn && <li><Link to="/login" className="nav-cta">Login</Link></li>}
+                    <li><Link to="/email-agent-service" className="nav-cta">Login</Link></li>
+                    <li><Link to="/dashboard" className="nav-cta">Dashboard</Link></li>
                 </ul>
             </div>
         </nav>

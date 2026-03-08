@@ -1147,3 +1147,47 @@ body {
         display: none;
     }
 }
+/* ─── LIGHT THEME OVERRIDES ─── */
+html[data-theme="light"] .mock-dashboard {
+    background: rgba(0, 0, 0, 0.02);
+    border-color: rgba(0, 0, 0, 0.08);
+}
+html[data-theme="light"] .mock-header {
+    background: rgba(0, 0, 0, 0.03);
+    border-color: rgba(0, 0, 0, 0.08);
+}
+html[data-theme="light"] .mock-dots span {
+    background: rgba(0, 0, 0, 0.15);
+}
+html[data-theme="light"] .tl-track,
+html[data-theme="light"] .pb-track {
+    background: rgba(0, 0, 0, 0.06);
+}
+html[data-theme="light"] .mock-stat,
+html[data-theme="light"] .mock-comment,
+html[data-theme="light"] .mock-email,
+html[data-theme="light"] .kpi,
+html[data-theme="light"] .os-item {
+    background: rgba(0, 0, 0, 0.03);
+    border-color: rgba(0, 0, 0, 0.08);
+}
+html[data-theme="light"] .tcard,
+html[data-theme="light"] .cta-inner {
+    background: rgba(0, 0, 0, 0.02);
+    border-color: rgba(0, 0, 0, 0.08);
+}
+html[data-theme="light"] .modal-box {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: rgba(99, 102, 241, 0.25);
+    box-shadow: 0 4px 60px rgba(0, 0, 0, 0.15);
+}
+html[data-theme="light"] .modal-input {
+    background: rgba(0, 0, 0, 0.03);
+    border-color: rgba(0, 0, 0, 0.1);
+}
+html[data-theme="light"] .modal-close {
+    background: rgba(0, 0, 0, 0.05);
+}
+html[data-theme="light"] .modal-close:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
