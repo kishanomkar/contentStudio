@@ -19,7 +19,7 @@
 }
 
 html[data-theme="light"] {
-    --bg: #f0f4ff;
+    --bg: #ecf1ff;
     --text-primary: #0f172a;
 }
 
@@ -426,7 +426,7 @@ html[data-theme="light"] .back {
 }
 
 html[data-theme="light"] .back-accent {
-    color: #4f46e5;
+    color: #ffffff;
 }
 
 .back-sub {

@@ -22,7 +22,7 @@ import Login from './pages/Login';
 import Navbar2 from './components/Navbar2';
 function AppContent() {
   const { pathname } = useLocation();
-  const showNavbar = pathname !== '/login';
+  const showNavbar = pathname !== '/login' && pathname !== '/';
 
   // Fetch emails on app load
   useEffect(() => {
