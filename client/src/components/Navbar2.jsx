@@ -23,12 +23,21 @@ const MoonIcon = () => (
 )
 
 export default function Navbar2() {
+
     const { pathname } = useLocation()
     const navigate = useNavigate()
+
     const [menuOpen, setMenuOpen] = useState(false)
-    const [darkMode, setDarkMode] = useState(true)
+    const [darkMode, setDarkMode] = useState(() => {
+    const savedTheme = localStorage.getItem("theme")
+    return savedTheme ? savedTheme === "dark" : true
+})
     const [scrolled, setScrolled] = useState(false)
+    const [isLoggedIn, setIsLoggedIn] = useState(false)
+    const [toolsOpen, setToolsOpen] = useState(false)
+
     const navRef = useRef(null)
+    const toolsRef = useRef(null)
 
     const isActive = (path) => pathname === path ? 'active' : ''
 
@@ -38,9 +47,24 @@ export default function Navbar2() {
         if (token) {
             navigate('/youtube-processor')
         } else {
-            navigate('/email-agent-service')
+            navigate('/login')
         }
     }
+
+    const handleEmailClick = (e) => {
+        e.preventDefault()
+        const token = localStorage.getItem('token')
+        if (token) {
+            navigate('/dashboard')
+        } else {
+            navigate('/login')
+        }
+    }
+
+    useEffect(() => {
+        const token = localStorage.getItem('token')
+        setIsLoggedIn(!!token)
+    }, [pathname])
 
     useEffect(() => {
         const onScroll = () => setScrolled(window.scrollY > 20)
@@ -49,86 +73,270 @@ export default function Navbar2() {
     }, [])
 
     useEffect(() => {
-        document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light')
-    }, [darkMode])
+    const theme = darkMode ? "dark" : "light"
 
-    useEffect(() => { setMenuOpen(false) }, [pathname])
+    document.documentElement.setAttribute("data-theme", theme)
+
+    localStorage.setItem("theme", theme)
+}, [darkMode])
 
     useEffect(() => {
-        if (!menuOpen) return
-        const handleClick = (e) => {
-            if (navRef.current && !navRef.current.contains(e.target)) setMenuOpen(false)
+        setMenuOpen(false)
+        setToolsOpen(false)
+    }, [pathname])
+
+    useEffect(() => {
+
+        const handleClickOutside = (e) => {
+
+            if (
+                toolsRef.current &&
+                !toolsRef.current.contains(e.target)
+            ) {
+                setToolsOpen(false)
+            }
+
+            if (
+                navRef.current &&
+                !navRef.current.contains(e.target)
+            ) {
+                setMenuOpen(false)
+            }
+
         }
-        document.addEventListener('mousedown', handleClick)
-        return () => document.removeEventListener('mousedown', handleClick)
-    }, [menuOpen])
+
+        document.addEventListener('mousedown', handleClickOutside)
+
+        return () => document.removeEventListener('mousedown', handleClickOutside)
+
+    }, [])
 
     return (
+
         <nav className={`nav${scrolled ? ' nav-scrolled' : ''}`} id="nav" ref={navRef}>
+
             <div className="nav-inner">
+
                 <Link to="/" className="nav-logo">
                     <span className="logo-icon">⚡</span>
                     <span>Content<span className="logo-accent">Studio</span> AI</span>
                 </Link>
 
-                {/* Desktop links */}
+                {/* Desktop Links */}
+
                 <ul className="nav-links nav-links-desktop">
-                    <li><Link to="/home" className={isActive('/home')}>Features</Link></li>
-                    <li><Link to="/about" className={isActive('/about')}>About</Link></li>
-                    <li><Link to="/faq" className={isActive('/faq')}>FAQ</Link></li>
-                    
-                    {/* Tools Dropdown */}
-                    <li className="nav-dropdown">
-                        <span className="dropdown-toggle">Tools</span>
-                        <ul className="dropdown-menu">
-                            <li><Link to="/speech-to-text" className={isActive('/speech-to-text')}>Speech to Text</Link></li>
-                            <li><Link to="/text-to-speech" className={isActive('/text-to-speech')}>Text to Speech</Link></li>
-                            <li><Link to="/text-to-video" className={isActive('/text-to-video')}>Text to Video</Link></li>
-                            <li><Link to="/thumbnail-generator" className={isActive('/thumbnail-generator')}>Thumbnail Generator</Link></li>
-                            <li><a href="#" onClick={handleYoutubeClick} className={isActive('/youtube-processor')}>YouTube Processor</a></li>
-                        </ul>
+
+                    <li>
+                        <Link to="/home" className={isActive('/home')}>
+                            Features
+                        </Link>
                     </li>
 
                     <li>
-                        <button className="theme-toggle" onClick={() => setDarkMode(!darkMode)} aria-label="Toggle theme">
+                        <Link to="/about" className={isActive('/about')}>
+                            About
+                        </Link>
+                    </li>
+
+                    <li>
+                        <Link to="/faq" className={isActive('/faq')}>
+                            FAQ
+                        </Link>
+                    </li>
+
+
+                    {/* Tools Dropdown */}
+
+                    <li className="nav-dropdown" ref={toolsRef}>
+
+                        <button
+                            className="dropdown-toggle"
+                            onClick={() => setToolsOpen(!toolsOpen)}
+                        >
+                            Tools
+                        </button>
+
+                        {toolsOpen && (
+
+                            <ul className="dropdown-menu">
+
+                                <li>
+                                    <Link to="/speech-to-text">
+                                        Speech to Text
+                                    </Link>
+                                </li>
+
+                                <li>
+                                    <Link to="/text-to-speech">
+                                        Text to Speech
+                                    </Link>
+                                </li>
+
+                                <li>
+                                    <Link to="/text-to-video">
+                                        Text to Video
+                                    </Link>
+                                </li>
+
+                                <li>
+                                    <Link to="/thumbnail-generator">
+                                        Thumbnail Generator
+                                    </Link>
+                                </li>
+
+                                <li>
+                                    <a href="#" onClick={handleYoutubeClick}>
+                                        YouTube Processor
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a href="#" onClick={handleEmailClick}>
+                                        Email Agent Service
+                                    </a>
+                                </li>
+
+                            </ul>
+
+                        )}
+
+                    </li>
+
+
+                    <li>
+                        <button
+                            className="theme-toggle"
+                            onClick={() => setDarkMode(!darkMode)}
+                            aria-label="Toggle theme"
+                        >
                             {darkMode ? <SunIcon /> : <MoonIcon />}
                         </button>
                     </li>
-                    <li><Link to="/email-agent-service" className={`nav-cta ${isActive('/email-agent-service')}`}>Login</Link></li>
-                    <li><Link to="/dashboard" className={`nav-cta ${isActive('/dashboard')}`}>Dashboard</Link></li>
+
+
+                    {!isLoggedIn && (
+
+                        <li>
+                            <Link
+                                to="/login"
+                                className={`nav-cta ${isActive('/login')}`}
+                            >
+                                Login
+                            </Link>
+                        </li>
+
+                    )}
+
                 </ul>
 
-                {/* Mobile controls */}
+
+                {/* Mobile Controls */}
+
                 <div className="nav-mobile-controls">
-                    <button className="theme-toggle" onClick={() => setDarkMode(!darkMode)} aria-label="Toggle theme">
+
+                    <button
+                        className="theme-toggle"
+                        onClick={() => setDarkMode(!darkMode)}
+                        aria-label="Toggle theme"
+                    >
                         {darkMode ? <SunIcon /> : <MoonIcon />}
                     </button>
-                    <button className={`hamburger${menuOpen ? ' open' : ''}`} onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">
-                        <span /><span /><span />
+
+                    <button
+                        className={`hamburger${menuOpen ? ' open' : ''}`}
+                        onClick={() => setMenuOpen(!menuOpen)}
+                        aria-label="Toggle menu"
+                    >
+                        <span />
+                        <span />
+                        <span />
                     </button>
+
                 </div>
+
             </div>
 
-            {/* Mobile drawer */}
+
+            {/* Mobile Menu */}
+
             <div className={`mobile-menu${menuOpen ? ' open' : ''}`}>
+
                 <ul>
-                    <li><Link to="/home" className={isActive('/home')}>Features</Link></li>
-                    <li><Link to="/about" className={isActive('/about')}>About</Link></li>
-                    <li><Link to="/faq" className={isActive('/faq')}>FAQ</Link></li>
-                    <li className="mobile-menu-section">
-                        <span className="section-title">Tools</span>
-                        <ul className="submenu">
-                            <li><Link to="/speech-to-text" className={isActive('/speech-to-text')}>Speech to Text</Link></li>
-                            <li><Link to="/text-to-speech" className={isActive('/text-to-speech')}>Text to Speech</Link></li>
-                            <li><Link to="/text-to-video" className={isActive('/text-to-video')}>Text to Video</Link></li>
-                            <li><Link to="/thumbnail-generator" className={isActive('/thumbnail-generator')}>Thumbnail Generator</Link></li>
-                            <li><a href="#" onClick={handleYoutubeClick} className={isActive('/youtube-processor')}>YouTube Processor</a></li>
-                        </ul>
+
+                    <li>
+                        <Link to="/home">Features</Link>
                     </li>
-                    <li><Link to="/email-agent-service" className="nav-cta">Login</Link></li>
-                    <li><Link to="/dashboard" className="nav-cta">Dashboard</Link></li>
+
+                    <li>
+                        <Link to="/about">About</Link>
+                    </li>
+
+                    <li>
+                        <Link to="/faq">FAQ</Link>
+                    </li>
+
+                    <li className="mobile-menu-section">
+
+                        <span className="section-title">
+                            Tools
+                        </span>
+
+                        <ul className="submenu">
+
+                            <li>
+                                <Link to="/speech-to-text">
+                                    Speech to Text
+                                </Link>
+                            </li>
+
+                            <li>
+                                <Link to="/text-to-speech">
+                                    Text to Speech
+                                </Link>
+                            </li>
+
+                            <li>
+                                <Link to="/text-to-video">
+                                    Text to Video
+                                </Link>
+                            </li>
+
+                            <li>
+                                <Link to="/thumbnail-generator">
+                                    Thumbnail Generator
+                                </Link>
+                            </li>
+
+                            <li>
+                                <a href="#" onClick={handleYoutubeClick}>
+                                    YouTube Processor
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="#" onClick={handleEmailClick}>
+                                    Email Agent Service
+                                </a>
+                            </li>
+
+                        </ul>
+
+                    </li>
+
+                    {!isLoggedIn && (
+
+                        <li>
+                            <Link to="/login" className="nav-cta">
+                                Login
+                            </Link>
+                        </li>
+
+                    )}
+
                 </ul>
+
             </div>
+
         </nav>
     )
 }

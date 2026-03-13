@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import ParticleCanvas from '../components/ParticleCanvas.jsx'
-import Navbar from '../components/Navbar.jsx'
+import Navbar2 from '../components/Navbar2.jsx'
 import Footer from '../components/Footer.jsx'
 import '../styles/shared.css'
 import '../styles/about.css'
@@ -37,7 +37,7 @@ export default function AboutPage() {
             <ParticleCanvas />
             <div className="ambient-orb orb-1" />
             <div className="ambient-orb orb-2" />
-            <Navbar />
+            <Navbar2 />
 
             <div className="page-header">
                 <div className="page-header-badge">✦ Our Story</div>

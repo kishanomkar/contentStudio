@@ -344,7 +344,7 @@ body {
 }
 
 /* ─── LIGHT THEME ─── */
-[data-theme="light"] {
+html[data-theme="light"] {
     --bg: #f0f4ff;
     --bg-card: rgba(0, 0, 0, 0.04);
     --border: rgba(0, 0, 0, 0.08);
@@ -354,35 +354,35 @@ body {
     --text-muted: #64748b;
 }
 
-[data-theme="light"] body {
+html[data-theme="light"] body {
     background: var(--bg);
 }
 
-[data-theme="light"] .nav {
+html[data-theme="light"] .nav {
     background: rgba(240, 244, 255, 0.85);
     border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
 
-[data-theme="light"] .nav-scrolled {
+html[data-theme="light"] .nav-scrolled {
     background: rgba(240, 244, 255, 0.97) !important;
 }
 
-[data-theme="light"] #bg-canvas {
+html[data-theme="light"] #bg-canvas {
     opacity: 0.1;
 }
 
-[data-theme="light"] .dropdown-menu {
+html[data-theme="light"] .dropdown-menu {
     background: rgba(240, 244, 255, 0.98);
     border: 1px solid rgba(0, 0, 0, 0.12);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
-[data-theme="light"] .dropdown-menu li {
+html[data-theme="light"] .dropdown-menu li {
     border-bottom-color: rgba(0, 0, 0, 0.06);
 }
 
-[data-theme="light"] .dropdown-menu a:hover,
-[data-theme="light"] .dropdown-menu a.active {
+html[data-theme="light"] .dropdown-menu a:hover,
+html[data-theme="light"] .dropdown-menu a.active {
     background: rgba(99, 102, 241, 0.12);
 }
 
@@ -416,6 +416,43 @@ body {
     color: var(--text-primary);
     transform: rotate(18deg) scale(1.1);
     box-shadow: 0 4px 16px rgba(99, 102, 241, 0.2);
+}
+
+html[data-theme="light"] .theme-toggle {
+    background: rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    color: var(--text-secondary);
+}
+
+html[data-theme="light"] .theme-toggle:hover {
+    background: rgba(0, 0, 0, 0.1);
+    border-color: rgba(0, 0, 0, 0.2);
+    color: var(--text-primary);
+}
+
+html[data-theme="light"] .nav-cta {
+    color: #4f46e5 !important;
+    border-color: rgba(79, 70, 229, 0.4);
+}
+
+html[data-theme="light"] .nav-cta:hover {
+    color: #312e81 !important;
+    background: rgba(79, 70, 229, 0.15) !important;
+}
+
+html[data-theme="light"] .mobile-menu {
+    background: rgba(240, 244, 255, 0.97);
+}
+
+html[data-theme="light"] .stat-card,
+html[data-theme="light"] .pricing-card {
+    background: var(--bg-card);
+    border-color: var(--border);
+}
+
+html[data-theme="light"] .stat-card:hover,
+html[data-theme="light"] .pricing-card:hover {
+    border-color: var(--border-hover);
 }
 
 /* ─── HAMBURGER ─── */
@@ -1182,4 +1219,58 @@ body {
     color: var(--text-muted);
     text-align: center;
     margin-top: 0.5rem;
+}
+
+/* ─── LIGHT THEME OVERRIDES FROM HOMEPAGE.CSS ─── */
+html[data-theme="light"] .mock-dashboard {
+    background: rgba(0, 0, 0, 0.02);
+    border-color: rgba(0, 0, 0, 0.08);
+}
+
+html[data-theme="light"] .mock-header {
+    background: rgba(0, 0, 0, 0.03);
+    border-color: rgba(0, 0, 0, 0.08);
+}
+
+html[data-theme="light"] .mock-dots span {
+    background: rgba(0, 0, 0, 0.15);
+}
+
+html[data-theme="light"] .tl-track,
+html[data-theme="light"] .pb-track {
+    background: rgba(0, 0, 0, 0.06);
+}
+
+html[data-theme="light"] .mock-stat,
+html[data-theme="light"] .mock-comment,
+html[data-theme="light"] .mock-email,
+html[data-theme="light"] .kpi,
+html[data-theme="light"] .os-item {
+    background: rgba(0, 0, 0, 0.03);
+    border-color: rgba(0, 0, 0, 0.08);
+}
+
+html[data-theme="light"] .tcard,
+html[data-theme="light"] .cta-inner {
+    background: rgba(0, 0, 0, 0.02);
+    border-color: rgba(0, 0, 0, 0.08);
+}
+
+html[data-theme="light"] .modal-box {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: rgba(99, 102, 241, 0.25);
+    box-shadow: 0 4px 60px rgba(0, 0, 0, 0.15);
+}
+
+html[data-theme="light"] .modal-input {
+    background: rgba(0, 0, 0, 0.03);
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+html[data-theme="light"] .modal-close {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+html[data-theme="light"] .modal-close:hover {
+    background: rgba(0, 0, 0, 0.1);
 }

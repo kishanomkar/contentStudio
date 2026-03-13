@@ -17,9 +17,9 @@ import SpeechToText from './pages/SpeechToText';
 import Text2Speech from './pages/Text2Speech';
 import Text2Vid from './pages/Text2Vid';
 import ThumbnailGenerator from './pages/ThumbnailGenerator';
-import Navbar from './components/Navbar';
+// import Navbar from './components/Navbar';
 import Login from './pages/Login';
-
+import Navbar2 from './components/Navbar2';
 function AppContent() {
   const { pathname } = useLocation();
   const showNavbar = pathname !== '/login';
@@ -42,11 +42,10 @@ function AppContent() {
 
   return (
     <>
-      {showNavbar && <Navbar />}
+      {showNavbar && <Navbar2 />}
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/home" element={<HomePage />} />
-        {/* <Route path="/login" element={<Login />} /> */}
         <Route path="/about" element={<AboutPage />} />
         <Route path="/faq" element={<FAQPage />} />
         <Route path="/terms-of-service" element={<TermsOfService />} />

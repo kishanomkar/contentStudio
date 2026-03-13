@@ -7,13 +7,20 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    transition: background-color 0.4s ease, border-color 0.4s ease, color 0.4s ease, box-shadow 0.4s ease;
 }
 
 :root {
     --bg: #070a13;
+    --text-primary: #f1f5f9;
     --font: 'Outfit', sans-serif;
     --accent: #6366f1;
     --pink: #ec4899;
+}
+
+html[data-theme="light"] {
+    --bg: #f0f4ff;
+    --text-primary: #0f172a;
 }
 
 html,
@@ -23,7 +30,7 @@ body {
     overflow: hidden;
     background: var(--bg);
     font-family: var(--font);
-    color: #f1f5f9;
+    color: var(--text-primary);
 }
 
 /* ─── Particle canvas ─── */
@@ -101,6 +108,16 @@ body {
     transform: rotateY(0deg);
 }
 
+html[data-theme="light"] .front {
+    background: linear-gradient(145deg, #ffffff 0%, #f8fafc 40%, #f1f5f9 100%);
+    border: 1px solid rgba(99, 102, 241, 0.15);
+    box-shadow:
+        0 0 0 1px rgba(0, 0, 0, 0.04),
+        0 40px 80px rgba(0, 0, 0, 0.1),
+        0 0 60px rgba(99, 102, 241, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
 /* Book spine highlight */
 .book-spine {
     position: absolute;
@@ -110,6 +127,11 @@ body {
     width: 10px;
     background: linear-gradient(to right, rgba(99, 102, 241, 0.4), rgba(99, 102, 241, 0.05), transparent);
     border-right: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+html[data-theme="light"] .book-spine {
+    background: linear-gradient(to right, rgba(99, 102, 241, 0.2), rgba(99, 102, 241, 0.02), transparent);
+    border-right: 1px solid rgba(99, 102, 241, 0.1);
 }
 
 /* Orbs on front */
@@ -129,6 +151,10 @@ body {
     animation: orbPulse 6s ease-in-out infinite alternate;
 }
 
+html[data-theme="light"] .face-orb-1 {
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+}
+
 .face-orb-2 {
     width: 200px;
     height: 200px;
@@ -136,6 +162,10 @@ body {
     bottom: -40px;
     left: -40px;
     animation: orbPulse 8s ease-in-out infinite alternate-reverse;
+}
+
+html[data-theme="light"] .face-orb-2 {
+    background: radial-gradient(circle, rgba(236, 72, 153, 0.1) 0%, transparent 70%);
 }
 
 .face-orb-3 {
@@ -146,6 +176,10 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     animation: orbPulse 4s ease-in-out infinite alternate;
+}
+
+html[data-theme="light"] .face-orb-3 {
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.1) 0%, transparent 70%);
 }
 
 @keyframes orbPulse {
@@ -188,6 +222,12 @@ body {
     animation: fadeUp 0.8s ease 0.2s both;
 }
 
+html[data-theme="light"] .front-eyebrow {
+    color: #4f46e5;
+    background: rgba(79, 70, 229, 0.08);
+    border-color: rgba(79, 70, 229, 0.2);
+}
+
 .front-logo {
     font-size: clamp(2rem, 6vw, 2.8rem);
     font-weight: 900;
@@ -207,6 +247,10 @@ body {
     color: #818cf8;
 }
 
+html[data-theme="light"] .logo-accent {
+    color: #4f46e5;
+}
+
 .front-tagline {
     font-size: 1rem;
     font-weight: 400;
@@ -214,6 +258,10 @@ body {
     line-height: 1.7;
     margin-bottom: 1.8rem;
     animation: fadeUp 0.8s ease 0.5s both;
+}
+
+html[data-theme="light"] .front-tagline {
+    color: #475569;
 }
 
 /* Floating mini cards */
@@ -238,6 +286,12 @@ body {
     font-weight: 500;
     color: #cbd5e1;
     animation: miniFloat 3s ease-in-out infinite;
+}
+
+html[data-theme="light"] .mini-card {
+    background: rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    color: #334155;
 }
 
 .mc-1 {
@@ -347,6 +401,12 @@ body {
     justify-content: center;
 }
 
+html[data-theme="light"] .back {
+    background: linear-gradient(145deg, #ffffff, #f8fafc);
+    border: 1px solid rgba(99, 102, 241, 0.15);
+    box-shadow: 0 40px 80px rgba(0, 0, 0, 0.08);
+}
+
 .back-content {
     text-align: center;
     display: flex;
@@ -363,6 +423,10 @@ body {
 
 .back-accent {
     color: #818cf8;
+}
+
+html[data-theme="light"] .back-accent {
+    color: #4f46e5;
 }
 
 .back-sub {
@@ -410,7 +474,7 @@ body {
     position: fixed;
     inset: 0;
     z-index: 100;
-    background: #070a13;
+    background: var(--bg);
     display: flex;
     flex-direction: column;
     align-items: center;

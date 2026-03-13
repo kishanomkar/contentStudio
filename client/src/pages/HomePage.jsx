@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import NeuralCanvas from '../components/NeuralCanvas.jsx'
 import BrainCanvas from '../components/BrainCanvas.jsx'
-import Navbar from '../components/Navbar.jsx'
+import Navbar2 from '../components/Navbar2.jsx'
 import WaitlistModal from '../components/WaitlistModal.jsx'
 import '../styles/homepage.css'
 import '../styles/shared.css'
@@ -97,7 +97,7 @@ export default function HomePage() {
             <div className="ambient-orb orb-1" />
             <div className="ambient-orb orb-2" />
             <div className="ambient-orb orb-3" />
-            <Navbar />
+            <Navbar2 />
 
             {/* HERO */}
             <section className="hero" id="hero">

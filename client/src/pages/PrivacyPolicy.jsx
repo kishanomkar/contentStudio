@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import Navbar from '../components/Navbar'
+import Navbar2 from '../components/Navbar2'
 import '../styles/shared.css'
 import '../styles/legal.css'
 
@@ -11,7 +11,7 @@ export default function PrivacyPolicy() {
 
     return (
         <>
-            <Navbar />
+            <Navbar2 />
             <div className="legal-container">
                 <div className="legal-header">
                     <h1>Privacy Policy</h1>

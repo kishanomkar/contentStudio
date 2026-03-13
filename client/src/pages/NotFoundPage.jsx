@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom'
-import Navbar from '../components/Navbar.jsx'
+import Navbar2 from '../components/Navbar2.jsx'
 import '../styles/shared.css'
 
 export default function NotFoundPage() {
     return (
         <>
-            <Navbar />
+            <Navbar2 />
             <div style={{
                 minHeight: '100vh',
                 display: 'flex',
