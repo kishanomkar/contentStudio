@@ -176,7 +176,7 @@ export default function HomePage() {
                                 <li><span className="fl-icon" style={{ background: 'rgba(236,72,153,0.15)', color: '#ec4899' }}>✂</span>Podcast / Long-Video Clipping</li>
                                 <li><span className="fl-icon" style={{ background: 'rgba(236,72,153,0.15)', color: '#ec4899' }}>📐</span>Auto Aspect Ratio Adjustment (9:16, 4:5, 16:9)</li>
                             </ul>
-                            <Link to="/login" className="feature-cta" style={{ '--clr': '#ec4899' }}>Powered By ContentStudio  </Link>
+                            <div className="feature-cta" style={{ '--clr': '#ec4899' }}>Powered By ContentStudio  </div>
                         </div>
                     </div>
                 </section>
@@ -194,7 +194,7 @@ export default function HomePage() {
                                 <li><span className="fl-icon" style={{ background: 'rgba(16,185,129,0.15)', color: '#10b981' }}>📅</span>Optimal Multi-Platform Posting Scheduler</li>
                                 <li><span className="fl-icon" style={{ background: 'rgba(16,185,129,0.15)', color: '#10b981' }}>📈</span>Trend Detection Engine</li>
                             </ul>
-                            <Link to="/login" className="feature-cta" style={{ '--clr': '#10b981' }}>Powered By ContentStudio  </Link>
+                            <div className="feature-cta" style={{ '--clr': '#10b981' }}>Powered By ContentStudio  </div>
                         </div>
                         <div className="feature-visual reveal-right">
                             <div className="mock-dashboard" style={{ '--accent': '#10b981' }}>
@@ -275,7 +275,7 @@ export default function HomePage() {
                                 <li><span className="fl-icon" style={{ background: 'rgba(245,158,11,0.15)', color: '#f59e0b' }}>🎯</span>Sponsorship Insertion Point Optimization</li>
                                 <li><span className="fl-icon" style={{ background: 'rgba(245,158,11,0.15)', color: '#f59e0b' }}>🤝</span>Auto-Generates Counter-Offer Negotiation Replies</li>
                             </ul>
-                            <Link to="/login" className="feature-cta" style={{ '--clr': '#f59e0b' }}>Powered By ContentStudio  </Link>
+                            <div className="feature-cta" style={{ '--clr': '#f59e0b' }}>Powered By ContentStudio  </div>
                         </div>
                     </div>
                 </section>
@@ -293,7 +293,7 @@ export default function HomePage() {
                                 <li><span className="fl-icon" style={{ background: 'rgba(99,102,241,0.15)', color: '#818cf8' }}>🔮</span>Future Post Performance Prediction</li>
                                 <li><span className="fl-icon" style={{ background: 'rgba(99,102,241,0.15)', color: '#818cf8' }}>🏆</span>Competitor Benchmarking</li>
                             </ul>
-                            <Link to="/login" className="feature-cta" style={{ '--clr': '#818cf8' }}>Powered By ContentStudio  </Link>
+                            <div className="feature-cta" style={{ '--clr': '#818cf8' }}>Powered By ContentStudio  </div>
                         </div>
                         <div className="feature-visual reveal-right">
                             <div className="mock-dashboard" style={{ '--accent': '#6366f1' }}>
@@ -372,7 +372,7 @@ export default function HomePage() {
                                 <li><span className="fl-icon" style={{ background: 'rgba(59,130,246,0.15)', color: '#3b82f6' }}>👥</span>Engagement Trends &amp; Demographics</li>
                                 <li><span className="fl-icon" style={{ background: 'rgba(59,130,246,0.15)', color: '#3b82f6' }}>🤖</span>Personal Analytics Coach Predictions</li>
                             </ul>
-                            <Link to="/login" className="feature-cta" style={{ '--clr': '#3b82f6' }}>Powered By ContentStudio  </Link>
+                            <div className="feature-cta" style={{ '--clr': '#3b82f6' }}>Powered By ContentStudio  </div>
                         </div>
                     </div>
                 </section>
@@ -391,7 +391,7 @@ export default function HomePage() {
                                 <li><span className="fl-icon" style={{ background: 'rgba(139,92,246,0.15)', color: '#a78bfa' }}>💎</span>Monetization Maximizer</li>
                                 <li><span className="fl-icon" style={{ background: 'rgba(139,92,246,0.15)', color: '#a78bfa' }}>🌐</span>Cross-Platform Optimizer</li>
                             </ul>
-                            <Link to="/login" className="feature-cta" style={{ '--clr': '#a78bfa' }}>Powered By ContentStudio  </Link>
+                            <div className="feature-cta" style={{ '--clr': '#a78bfa' }}>Powered By ContentStudio  </div>
                         </div>
                         <div className="feature-visual reveal-right">
                             <div className="mock-dashboard" style={{ '--accent': '#8b5cf6' }}>
@@ -447,7 +447,7 @@ export default function HomePage() {
                                 <li><span className="fl-icon" style={{ background: 'rgba(20,184,166,0.15)', color: '#14b8a6' }}>🚀</span>One-Click Platform Export &amp; Automation</li>
                                 <li><span className="fl-icon" style={{ background: 'rgba(20,184,166,0.15)', color: '#14b8a6' }}>▶</span>Live Demo Capability</li>
                             </ul>
-                            <Link to="/login" className="feature-cta" style={{ '--clr': '#14b8a6' }}>Powered By ContentStudio  </Link>
+                            <div className="feature-cta" style={{ '--clr': '#14b8a6' }}>Powered By ContentStudio  </div>
                         </div>
                     </div>
                 </section>
