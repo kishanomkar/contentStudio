@@ -78,7 +78,7 @@ export default function Navbar2() {
     document.documentElement.setAttribute("data-theme", theme)
 
     localStorage.setItem("theme", theme)
-}, [darkMode])
+    }, [darkMode])
 
     useEffect(() => {
         setMenuOpen(false)

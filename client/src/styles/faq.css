@@ -1,5 +1,16 @@
 /* ─── FAQ PAGE ─── */
+/* LIGHT MODE TEXT FIX */
 
+[data-theme="light"] .page-header h1,
+[data-theme="light"] .page-header p,
+[data-theme="light"] .faq-q span,
+[data-theme="light"] .faq-a p,
+[data-theme="light"] .faq-cat,
+[data-theme="light"] .faq-search-input,
+[data-theme="light"] .faq-cta h3,
+[data-theme="light"] .faq-cta p {
+  color: #221f1f;
+}
 /* Search */
 .faq-search {
     position: relative;
